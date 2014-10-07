@@ -1,0 +1,45 @@
+<html>
+  <link href="http://twitter.github.com/bootstrap/assets/css/bootstrap.css">
+  <link rel="stylesheet" href="css/main.css">
+  <script src="http://code.angularjs.org/1.2.26/angular.js"></script>
+  <script src="controllers/controllers.js"></script>
+  <body ng-app="module">
+    <div id="container">
+      <div id="main" ng-controller="Controller1">
+          Controller 1 (parent): {{butter}}
+          <div id="second" ng-controller="Controller2">
+            Controller 2 (child) {{butter}}<br>
+            Child referring to parent: {{$parent.butter}}<br><br>
+            Input in child: 
+            <input type="text" ng-model="butter" /><br><br>
+            Own scope for butter (after inheriting from parent):
+            <ul> 
+              <li class="licontainer" ng-repeat="item in items track by $index">
+                {{butter}} &nbsp;&nbsp;{{item}}
+                <div class="controls">
+                  <input type="text" ng-model="butter" />
+                  <button ng-click="remove($index)">Remove</button>
+                </div>    
+              </li>
+            </ul>
+            <form ng-submit="submit()">
+              Add: 
+              <input type="text" ng-model="newItem" />
+              <button type="submit">Add</button>
+            </form>  
+            <test-directive info="greenLettuce"></test-directive>  
+            <test-directive info="darkerGreenLettuce"></test-directive>  
+              
+            <div id="third" ng-controller="Controller3">
+              <br>Here is value for butter in third level: {{butter}}<br>
+                  And accessing parent: {{$parent.butter}}<br>
+                  .. and top level: {{$parent.$parent.butter}}<br>
+                  And for another directive:<br>
+                  <span another-dir="Yellow Mello"></span><br>    
+                  <span another-dir="Root Beer"></span><br>
+            </div>
+          </div>
+        </div>  
+      </div>
+  </body>
+</html>
