@@ -1,0 +1,1 @@
+Just a simple Angular playground area trying different things with scope and directives.  An ongoing work in progress.
