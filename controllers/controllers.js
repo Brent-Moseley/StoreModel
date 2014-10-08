@@ -36,17 +36,19 @@ var module = angular.module('module', [])
 })
 .directive('anotherDir', function() {
   //   https://docs.angularjs.org/guide/directive
+  //   http://stackoverflow.com/questions/20018507/angularjs-what-is-the-need-of-the-directives-link-function-when-we-already-had
   return {
-    anotherDir: "=",
-    scope: {        // isolate scope
-      val: "=anotherDir" // this binds different scope based on the info attribute
+    restrict: 'A',
+    template: "I see this: {{val}}",
+    scope: {
     },
-    link:function(scope, element, attributes) {
-      console.log('I ran once');
+    link: function(scope, element, attrs) {
+      console.log('link ran')
+      console.log (scope)
 
-      scope.val = attributes.anotherDir
-    },
-    template: "{{val}}"
+      scope.val = attrs.anotherDir
+    }
+    
   }
 
   //       scope.$watch(attrs.anotherDir, function(value) {
