@@ -12,14 +12,23 @@ html {
 
 #main {
     line-height: 22px;
+    border: 3px solid black;
+    margin: 5px;
+    padding: 5px;
 }
 
 #second {
     margin-left: 15px;
+    border: 2px solid blue;
+    margin: 5px;
+    padding: 5px;
 }
 
 #third {
     margin-left: 40px;
+    border: 1px solid darkblue;
+    margin: 5px;
+    padding: 5px;
 }
 
 li {
