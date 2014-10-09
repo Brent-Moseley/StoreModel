@@ -1,6 +1,14 @@
+// Create a new object that just contains the passed in value as a member variable
+function TableRow (text) {
+  this.content = text
+}
+
 var module = angular.module('module', [])
+
 .controller('Controller1', ['$scope', function ($scope) {
     $scope.butter = "Test Me!!"
+    $scope.bread = new TableRow('bread')
+    //console.log ($scope.bread.content)
 }])
 .controller('Controller2', ['$scope', function ($scope) {
     $scope.butter = "Test Two!"
@@ -15,6 +23,10 @@ var module = angular.module('module', [])
     $scope.remove = function (index) {
       $scope.items.splice (index, 1)
     }  
+
+    $scope.$watch('butter', function(value, old) {
+      console.log ('watch triggered with new value: ' + value)
+    })
 }])
 
 .controller('Controller3', ['$scope', function ($scope) {
@@ -37,16 +49,19 @@ var module = angular.module('module', [])
 .directive('anotherDir', function() {
   //   https://docs.angularjs.org/guide/directive
   //   http://stackoverflow.com/questions/20018507/angularjs-what-is-the-need-of-the-directives-link-function-when-we-already-had
+  //   http://jasonmore.net/angular-js-directives-difference-controller-link/
   return {
-    restrict: 'A',
-    template: "I see this: {{val}}",
+    restrict: 'A',     // restrict to only attribute directives
+    template: "I see this: {{val}} and have this object: {{bread.content}}",
     scope: {
-    },
+    },    
     link: function(scope, element, attrs) {
       console.log('link ran')
-      console.log (scope)
+      //console.log (attrs)
 
       scope.val = attrs.anotherDir
+      scope.bread = new TableRow('bread absorbs ' + scope.val)
+
     }
     
   }
