@@ -33,6 +33,10 @@ var module = angular.module('module', [])
     $scope.butter = "I am a third level dream."
     $scope.pepper = 99
     $scope.checkBoxes = []
+
+    $scope.messageMe = function (message) {
+      alert (message);
+    }
 }])
 
 .directive('testDirective', function () {
@@ -64,4 +68,17 @@ var module = angular.module('module', [])
 
     }
   }
+})
+.directive('callOut', function () {
+    // Just a very simple directive to use for scope example
+    return {
+        scope: {           // isolate scope
+          call: "&" // this binds different scope based on the info attribute
+        },
+        template: '<button ng-click="call()">Call Out {{name}}</button>',   // Normally, this would be in an
+                  // external file, but don't know how to do this in JSFiddle.
+        link: function (scope, element, attrs) {
+          scope.name = attrs.name
+        }
+    }
 })
