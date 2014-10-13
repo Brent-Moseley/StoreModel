@@ -32,6 +32,7 @@ var module = angular.module('module', [])
 .controller('Controller3', ['$scope', function ($scope) {
     $scope.butter = "I am a third level dream."
     $scope.pepper = 99
+    $scope.info = 'I am the parent scope content, I am good!!'
     $scope.checkBoxes = []
 
     $scope.messageMe = function (message) {
@@ -45,8 +46,14 @@ var module = angular.module('module', [])
         restrict: 'E',     // restrict to only match on element names
         scope: {           // isolate scope
           lettuce: "=info" // this binds different scope based on the info attribute
+                           // In this way, you can pass in models to a 
+                           // directive that is using the isolate scope.
+                           // Best Practice: Use the scope option to create 
+                           // isolate scopes when making components that you 
+                           // want to reuse throughout your app.
         },
-        template: "<br>Directive: {{lettuce.name}} has {{lettuce.calories}} calories."   // Normally, this would be in an
+        template: "<br>Directive: {{lettuce.name}} has {{lettuce.calories}} calories."   
+                  // Normally, this would be in an
                   // external file, but don't know how to do this in JSFiddle.
     }
 })
@@ -57,7 +64,8 @@ var module = angular.module('module', [])
   return {
     restrict: 'A',     // restrict to only attribute directives
     template: "I see this: {{val}} and have this object: {{bread.content}}",
-    scope: {          // isolate scope
+    scope: {          // isolate scope, pulls in nothing from the parent 
+                      //  scope when empty.
     },    
     link: function(scope, element, attrs) {
       console.log('link ran')
@@ -73,12 +81,38 @@ var module = angular.module('module', [])
     // Just a very simple directive to use for scope example
     return {
         scope: {           // isolate scope
-          call: "&" // this binds different scope based on the info attribute
+          call: "&" // The & binding allows a directive to trigger evaluation 
+                    //of an expression in the context of the parent scope, at 
+                    // a specific time.
         },
-        template: '<button ng-click="call()">Call Out {{name}}</button>',   // Normally, this would be in an
+        template: '<button ng-click="call()">Call Out {{name}}</button>',   
+                  // Normally, this would be in an
                   // external file, but don't know how to do this in JSFiddle.
         link: function (scope, element, attrs) {
           scope.name = attrs.name
         }
     }
 })
+.directive('aDialog', function() {
+  return {
+    restrict: 'E',
+    transclude: true,  // The transclude option changes the way scopes are nested. 
+                       // It makes it so that the contents of a transcluded 
+                       // directive have whatever scope is outside the directive, 
+                       // rather than whatever scope is on the inside. In doing so, 
+                       // it gives the contents access to the outside scope.
+                       // Best Practice: only use transclude: true when you want 
+                       // to create a directive that wraps arbitrary content.
+    scope: {},        // Note isolate scope, remove this and you do not get
+                      // transclude, info shows up from link function.
+    template: '<div class="alert" ng-transclude></div>',
+    // controller: function($scope){
+    //   $scope.info = 'Should not be seeing this!'
+    // }
+    link: function (scope, element, attrs) {
+      scope.info = 'Should not be seeing this!'
+    }
+  };
+})
+
+// https://github.com/angular/angular.js/wiki/Understanding-Directives
