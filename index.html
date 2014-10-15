@@ -42,6 +42,10 @@
                   <br><br>
                   And finally, a directive that wraps any arbitrary content:
                   <a-dialog>Here are some contents: {{info}}</a-dialog>
+                  <br>Focus on Months {{focusOnMonths}}<br>
+                  Check here to give focus: <input type="checkbox" ng-model="focusOnMonths" ng-value="-1" ng-change="inputBoxFocus()">
+
+                  To this input box:  <input id="number-months" type="text" style="width: 90px; height: 23px; margin: 0;" ng-model="months" focus-me="focusOnMonths" ng-disabled="">  Months
             </div>
           </div>
         </div>  

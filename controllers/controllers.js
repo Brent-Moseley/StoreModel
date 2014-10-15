@@ -38,6 +38,22 @@ var module = angular.module('module', [])
     $scope.messageMe = function (message) {
       alert (message);
     }
+
+    $scope.inputBoxFocus = function () {
+      console.log ('input box focus')
+      $scope.openInput()
+    }
+
+    $scope.focusOnMonths = false
+    $scope.openInput = function () {
+      console.log ('open')
+      $scope.focusOnMonths = true
+    };
+
+    $scope.closeInput = function () {
+      console.log ('close')
+      $scope.focusOnMonths = false
+    };    
 }])
 
 .directive('testDirective', function () {
@@ -111,6 +127,27 @@ var module = angular.module('module', [])
     // }
     link: function (scope, element, attrs) {
       scope.info = 'Should not be seeing this!'
+    }
+  };
+})
+.directive('focusMe', function($timeout) {
+  // based on demo:   http://plnkr.co/edit/LbHRBB?p=preview
+  return {
+    link: function(scope, element, attrs) {
+      var model = attrs.focusMe;
+      scope.$watch(model, function(value) {
+        console.log ('watch tr')
+        if(value === true) {
+          $timeout(function() {
+            element[0].focus(); 
+          })
+        }
+      });
+      element.bind('blur', function() {
+        console.log ('blur')
+        scope.focusOnMonths = false
+        scope.closeInput()
+      })
     }
   };
 })
