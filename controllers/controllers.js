@@ -46,13 +46,14 @@ var module = angular.module('module', [])
 
     $scope.focusOnMonths = false
     $scope.openInput = function () {
-      console.log ('open')
+      console.log ('open 2')
       $scope.focusOnMonths = true
     };
 
     $scope.closeInput = function () {
       console.log ('close')
       $scope.focusOnMonths = false
+      // http://plnkr.co/edit/ts3EMoaqMhjxmbD13Jcz?p=preview
     };    
 }])
 
@@ -135,21 +136,41 @@ var module = angular.module('module', [])
   return {
     link: function(scope, element, attrs) {
       var model = attrs.focusMe;
-      scope.$watch(model, function(value) {
-        console.log ('watch tr')
-        if(value === true) {
-          $timeout(function() {
-            element[0].focus(); 
-          })
-        }
+      scope.$watch(model, function(value) {    // Will set a watch on focusOnMonths
+        console.log ('watch tr ' + value)
+         if(value === true) {
+          console.log ('setting timeout')
+           $timeout(function() {
+             element[0].focus(); 
+           } )
+         }
+         if (value === false) {
+           console.log ('was false')
+            $timeout(function() {
+              console.log ('setting false timeout')
+              scope.focusOnMonths = false;
+              element[0].blur();
+            }, 100 )
+         }
       });
-      element.bind('blur', function() {
+      element.bind('blur', function() {   // Catch user action blur
         console.log ('blur')
-        scope.focusOnMonths = false
-        scope.closeInput()
+        scope.focusOnMonths = false;
+        scope.$apply()
+        //scope.closeInput()
       })
+      element.bind('focus', function() {  // Catch user action focus
+        console.log ('focus 1')
+        scope.focusOnMonths = true;
+        scope.$apply()
+        //scope.closeInput()
+      })      
     }
   };
 })
 
 // https://github.com/angular/angular.js/wiki/Understanding-Directives
+// http://jimhoskins.com/2012/12/17/angularjs-and-apply.html
+// http://www.sitepoint.com/understanding-angulars-apply-digest/
+// http://plnkr.co/edit/ts3EMoaqMhjxmbD13Jcz?p=preview
+
