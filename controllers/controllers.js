@@ -173,4 +173,5 @@ var module = angular.module('module', [])
 // http://jimhoskins.com/2012/12/17/angularjs-and-apply.html
 // http://www.sitepoint.com/understanding-angulars-apply-digest/
 // http://plnkr.co/edit/ts3EMoaqMhjxmbD13Jcz?p=preview
+// http://jsfiddle.net/31qgzfvk/1/
 
