@@ -35,6 +35,24 @@ var module = angular.module('module', [])
     $scope.pepper = 99
     $scope.info = 'I am the parent scope content, I am good!!'
     $scope.checkBoxes = []
+    $scope.cards = [
+      {
+        face: 'Jack',
+        filter: ''
+      }, 
+      {
+        face: '125.2200',
+        filter: 'currency'
+      },
+      {
+        face: '03/15/2013',
+        filter: 'date'
+      },
+      {
+        face: '144.780000',
+        filter: 'reverse'
+      }                   
+    ]
 
     $scope.messageMe = function (message) {
       alert (message);
@@ -151,10 +169,11 @@ var module = angular.module('module', [])
               console.log ('setting false timeout')
               scope.focusOnMonths = false;
               element[0].blur();
-            }, 100 )
+            }, 100 )   // BUG FIX:  Temp patch to fix repeated state shifting noted below
          }
       });
       element.bind('blur', function() {   // Catch user action blur
+        // BUG FIX:  Repeated state shifting / events when user unchecks the box.
         console.log ('blur')
         scope.focusOnMonths = false;
         scope.$apply()
@@ -167,6 +186,30 @@ var module = angular.module('module', [])
         //scope.closeInput()
       })      
     }
+  };
+})
+.filter('namedFilter', function($filter) {
+  // return a function that accepts a value and a filter name, see return below for details.
+  // This works because pipe takes an Angular expression, as in this format:
+  //  someValue | rsFilter:item.type.filter      where item.type.filter is 'currency' or 'date', etc.
+  return function(value, filterName) {
+    //console.log ('FILTER: ' + value + filterName)
+    if (filterName.length == 0) return value
+    return $filter(filterName)(value);   // invokes the named filter function on the value and returns it
+  };
+})
+.filter('reverse', function() {
+  return function(input, uppercase) {
+    input = input || '';
+    var out = "";
+    for (var i = 0; i < input.length; i++) {
+      out = input.charAt(i) + out;
+    }
+    // conditional based on optional argument
+    if (uppercase) {
+      out = out.toUpperCase();
+    }
+    return out;
   };
 })
 
