@@ -12,12 +12,12 @@
             Child referring to parent: {{$parent.butter}}<br><br>
             Input in child: 
             <input type="text" ng-model="butter" /><br><br>
-            Own scope for butter (after inheriting from parent):
+            Own scope for cream (after default value from controller of: {{cream}}):
             <ul> 
               <li class="licontainer" ng-repeat="item in items track by $index">
-                {{butter}} &nbsp;&nbsp;{{item}}
+                {{cream}} &nbsp;&nbsp;{{item}}
                 <div class="controls">
-                  <input type="text" ng-model="butter" />
+                  <input type="text" ng-model="cream" />
                   <button ng-click="remove($index)">Remove</button>
                 </div>    
               </li>

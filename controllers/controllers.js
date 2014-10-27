@@ -12,6 +12,7 @@ var module = angular.module('module', [])
 }])
 .controller('Controller2', ['$scope', function ($scope) {
     $scope.butter = "Test Two!"
+    $scope.cream = 'Cherry Cream'
     $scope.items = ['Ferrari', 'Sunglasses', 'Badge']
     $scope.greenLettuce = {name: 'Green Lettuce', calories: 25}
     $scope.darkerGreenLettuce = {name: 'Darker Green Lettuce', calories: 35}
