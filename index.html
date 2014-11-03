@@ -15,7 +15,7 @@
             Own scope for cream (after default value from controller of: {{cream}}):
             <ul> 
               <li class="licontainer" ng-repeat="item in items track by $index">
-                {{cream}} &nbsp;&nbsp;{{item}}
+                {{$index + 1}}.&nbsp;{{cream}} &nbsp;&nbsp;{{item}}
                 <div class="controls">
                   <input type="text" ng-model="cream" />
                   <button ng-click="remove($index)">Remove</button>
@@ -50,6 +50,7 @@
                   Using dynamic filter names from a string, and a custom filter:
                   <ul>
                     <li ng-repeat="card in cards">{{card.face | namedFilter:card.filter}}</li>
+                    <li>{{lastCard | reverse | capitalize}}
                   </ul>
             </div>
           </div>

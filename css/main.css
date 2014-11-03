@@ -43,4 +43,5 @@ li {
 .licontainer {
     width: 800px;
     height: 30px;
+    list-style-type: none;
 }

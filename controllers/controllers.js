@@ -1,6 +1,9 @@
 // Create a new object that just contains the passed in value as a member variable
 function TableRow (text) {
   this.content = text
+  this.showMe = function () {
+    return '|*' + this.content + '*|'
+  }
 }
 
 var module = angular.module('module', [])
@@ -24,6 +27,10 @@ var module = angular.module('module', [])
     $scope.remove = function (index) {
       $scope.items.splice (index, 1)
     }  
+
+    $scope.messageMe = function (message) {
+      alert (message);
+    }
 
     $scope.$watch('butter', function(value, old) {
       console.log ('watch triggered with new value: ' + value)
@@ -51,12 +58,13 @@ var module = angular.module('module', [])
       {
         face: '144.780000',
         filter: 'reverse'
-      }                   
+      },
+      {
+        face: 'The War is Over!!',
+        filter: 'capitalize'
+      }                           
     ]
-
-    $scope.messageMe = function (message) {
-      alert (message);
-    }
+    $scope.lastCard = 'If you can Read me, it did not work.';
 
     $scope.inputBoxFocus = function () {
       console.log ('input box focus')
@@ -78,54 +86,69 @@ var module = angular.module('module', [])
 
 .directive('testDirective', function () {
     // Just a very simple directive to use for scope example
+    // Returns the Directive Definition Object
     return {
         restrict: 'E',     // restrict to only match on element names
-        scope: {           // isolate scope
+        scope: {           // Isolate scope
           lettuce: "=info" // this binds different scope based on the info attribute
                            // In this way, you can pass in models to a 
                            // directive that is using the isolate scope.
                            // Best Practice: Use the scope option to create 
                            // isolate scopes when making components that you 
                            // want to reuse throughout your app.
+                           // This way, they will not interfere with each other.
+                           // See here: 
+                           // https://umur.io/angularjs-directives-using-isolated-scope-with-attributes/
         },
+        // lettuce below actually refers to the passed-in model name, ie
+        // greenLettuce or darkerGreenLettuce in the controller.
         template: "<br>Directive: {{lettuce.name}} has {{lettuce.calories}} calories."   
                   // Normally, this would be in an
-                  // external file, but don't know how to do this in JSFiddle.
+                  // external file, but this is small so will keep it here.
     }
 })
 .directive('anotherDir', function() {
+  // Demonstrates an attribute type directive that passes in a string as the value
+  // of the directive and then uses a link function for some processing.
   //   https://docs.angularjs.org/guide/directive
   //   http://stackoverflow.com/questions/20018507/angularjs-what-is-the-need-of-the-directives-link-function-when-we-already-had
   //   http://jasonmore.net/angular-js-directives-difference-controller-link/
   return {
     restrict: 'A',     // restrict to only attribute directives
-    template: "I see this: {{val}} and have this object: {{bread.content}}",
+    template: "I see this: {{val}} and have this object: {{bread.showMe()}}",  
+                                          // could also be {{bread.content}}
     scope: {          // isolate scope, pulls in nothing from the parent 
                       //  scope when empty.
     },    
     link: function(scope, element, attrs) {
-      console.log('link ran')
-      //console.log (attrs)
+      console.log('link ran, attrs:')
+      console.log (attrs)
 
-      scope.val = attrs.anotherDir
-      scope.bread = new TableRow('bread absorbs ' + scope.val)
+      scope.val = attrs.anotherDir  // get the value of this directive
+      scope.bread = new TableRow('bread absorbs ' + scope.val)  // Create an
+                           // object that 'polishes' the data in some way.
 
     }
   }
 })
 .directive('callOut', function () {
-    // Just a very simple directive to use for scope example
+    // Create a more elaborate directive that takes an Angular expression as
+    // an attribute and then invokes that expression. 
     return {
         scope: {           // isolate scope
           call: "&" // The & binding allows a directive to trigger evaluation 
                     //of an expression in the context of the parent scope, at 
                     // a specific time.
+                    // The angular expression that this attribute is bound to
+                    // will be evaluated in the context of the parent scope.
+                    // (Controller 2, and will be messageMe)
+                    // This is shorthand notation for call: "&call"
+                    // If two way binding is used (=) this gets executed on
+                    // every link cycle.
         },
         template: '<button ng-click="call()">Call Out {{name}}</button>',   
-                  // Normally, this would be in an
-                  // external file, but don't know how to do this in JSFiddle.
         link: function (scope, element, attrs) {
-          scope.name = attrs.name
+          scope.name = attrs.name  // set a var on local scope based on attr value
         }
     }
 })
@@ -152,6 +175,9 @@ var module = angular.module('module', [])
 })
 .directive('focusMe', function($timeout) {
   // based on demo:   http://plnkr.co/edit/LbHRBB?p=preview
+  // This directive controls focus of another element entirely through a link
+  // function.  The attribute that is passed in becomes the model to watch for
+  // changes.  
   return {
     link: function(scope, element, attrs) {
       var model = attrs.focusMe;
@@ -192,25 +218,28 @@ var module = angular.module('module', [])
   // return a function that accepts a value and a filter name, see return below for details.
   // This works because pipe takes an Angular expression, as in this format:
   //  someValue | rsFilter:item.type.filter      where item.type.filter is 'currency' or 'date', etc.
+  // $filter above is a dependency that gets injected
   return function(value, filterName) {
-    //console.log ('FILTER: ' + value + filterName)
-    if (filterName.length == 0) return value
+    if (filterName.length == 0) return value;
     return $filter(filterName)(value);   // invokes the named filter function on the value and returns it
   };
 })
 .filter('reverse', function() {
-  return function(input, uppercase) {
+  // a custom filter to reverse a string
+  return function(input) {
     input = input || '';
     var out = "";
     for (var i = 0; i < input.length; i++) {
       out = input.charAt(i) + out;
     }
-    // conditional based on optional argument
-    if (uppercase) {
-      out = out.toUpperCase();
-    }
     return out;
   };
+})
+.filter ('capitalize', function() {
+  // Simple custom filter to capitalize something
+  return function (input) {
+    return input.toUpperCase();
+  }
 })
 
 // https://github.com/angular/angular.js/wiki/Understanding-Directives
