@@ -133,7 +133,7 @@ var module = angular.module('module', [])
 })
 .directive('callOut', function () {
     // Create a more elaborate directive that takes an Angular expression as
-    // an attribute and then invokes that expression. 
+    // an attribute and then invokes that expression based on an event. 
     return {
         scope: {           // isolate scope
           call: "&" // The & binding allows a directive to trigger evaluation 
