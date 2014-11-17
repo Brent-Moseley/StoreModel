@@ -1,12 +1,40 @@
 <html>
-  <link href="http://twitter.github.com/bootstrap/assets/css/bootstrap.css">
+  <link rel="stylesheet" href="foundation/css/foundation.css">
+ <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+  <script src="foundation/js/foundation.min.js"></script>
   <link rel="stylesheet" href="css/main.css">
   <script src="http://code.angularjs.org/1.2.26/angular.js"></script>
   <script src="controllers/controllers.js"></script>
   <body ng-app="module">
     <div id="container">
       <div id="main" ng-controller="Controller1">
-          Controller 1 (parent): {{butter}} : Object: {{bread.content}}
+          Controller 1
+          <br>Inventory Items:
+            <div class="row" ng-repeat="item in items track by $index">
+              <div class="small-1 columns divider-dotted">
+                {{$index + 1}}
+              </div>
+              <div class="small-2 columns divider-dotted">
+                {{item.name}}
+              </div>
+              <div class="small-4 columns divider-dotted">
+                {{item.description}}
+              </div>
+              <div class="small-2 columns divider-dotted">
+                {{item.price | currency}}
+              </div>
+              <div class="small-2 columns divider-dotted">
+                <button class="small radius button" ng-click=" remove($index)">Remove</button>
+              </div>
+            </div>
+          </div>
+          <form ng-submit="submit()">
+            Add a new item: 
+            <input type="text" ng-model="newItem" />
+            <button type="submit">Add</button>
+          </form>  
+
+
           <div id="second" ng-controller="Controller2">
             Controller 2 (child) {{butter}}<br>
             Child referring to parent: {{$parent.butter}}<br><br>
@@ -56,5 +84,8 @@
           </div>
         </div>  
       </div>
+    <script>
+     $(document).foundation();
+    </script>
   </body>
 </html>

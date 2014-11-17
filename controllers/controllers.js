@@ -9,8 +9,13 @@ function TableRow (text) {
 var module = angular.module('module', [])
 
 .controller('Controller1', ['$scope', function ($scope) {
-    $scope.butter = "Test Me!!"
-    $scope.bread = new TableRow('bread')
+     $scope.items = [
+       {name: 'Nexus 6', description: 'A decent phone by Google', price: 599},
+       {name: 'iPhone 6', description: 'Trying to play catch-up', price: 699},
+       {name: 'iPhone 6 plus', description: 'sub-standard hardware & overpriced', price: 1250},
+       {name: 'Galaxy S5', description: 'Pretty awesome phone', price: 499},
+       {name: 'Galaxy Note 4', description: 'Premium, amazing, incredible phone!', price: 599}
+     ];
     //console.log ($scope.bread.content)
 }])
 .controller('Controller2', ['$scope', function ($scope) {
